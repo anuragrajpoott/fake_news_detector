@@ -4,7 +4,7 @@ function App() {
 
   return (
     <>
-      <div>anurag</div>
+      <div className="bg-black">anurag</div>
     </>
   )
 }
