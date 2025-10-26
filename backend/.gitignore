@@ -1,0 +1,4 @@
+# Node / Express
+node_modules/
+dist/
+.env
