@@ -1,21 +1,27 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { checkNews } from "../services/operations/newsOperation"; // corrected import path
 
-export const Home = () => {
+const Home = () => {
   const [newsText, setNewsText] = useState("");
-  const [result, setResult] = useState(null);
+  const { result } = useSelector((state) => state.news);
+  const dispatch = useDispatch();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!newsText.trim()) return alert("Please enter some news text.");
+    if (!newsText.trim()) {
+      alert("Please enter some news text.");
+      return;
+    }
 
-    // Simulate AI prediction for now
-    const fakeResult = Math.random() > 0.5 ? "Fake" : "Real";
-    const confidence = (Math.random() * (0.9 - 0.6) + 0.6).toFixed(2); // 60–90% confidence
-
-    // Show result
-    setResult({ prediction: fakeResult, confidence });
-    setNewsText("");
+    try {
+      await dispatch(checkNews(newsText));
+      setNewsText("");
+    } catch (error) {
+      console.error("Error checking news:", error);
+      alert("Failed to analyze news. Please try again.");
+    }
   };
 
   return (
@@ -56,23 +62,30 @@ export const Home = () => {
       {result && (
         <div
           className={`mt-8 mb-8 p-6 rounded-xl w-full max-w-md text-center shadow-lg transition-all ${
-            result.prediction === "Fake"
+            result.prediction?.toLowerCase() === "fake"
               ? "bg-red-500/10 border border-red-500"
               : "bg-green-500/10 border border-green-500"
           }`}
         >
           <h2
             className={`text-2xl font-bold mb-2 ${
-              result.prediction === "Fake" ? "text-red-400" : "text-green-400"
+              result.prediction?.toLowerCase() === "fake"
+                ? "text-red-400"
+                : "text-green-400"
             }`}
           >
             {result.prediction} News
           </h2>
-          <p className="text-gray-300">
-            Confidence: <span className="font-semibold">{result.confidence * 100}%</span>
-          </p>
+          {result.confidence !== undefined && (
+            <p className="text-gray-400">
+              Confidence: {(result.confidence * 100).toFixed(1)}%
+            </p>
+          )}
         </div>
       )}
     </div>
   );
 };
+
+export
+default Home;

@@ -1,8 +1,8 @@
 export const endPoints = {
-  // User
-  REGISTER: "/user/register",
-  LOGIN: "/user/login",  
-  
-  //news
-  NewsCheck: "/check-news"
+  // ──────────────── User Endpoints ────────────────
+  REGISTER: "/auth/signup",
+  LOGIN: "/auth/login",
+
+  // ──────────────── News Detection ────────────────
+  NEWS_CHECK: "/check-news",
 };

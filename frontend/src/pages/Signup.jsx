@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { signUp } from "../services/operations/authOperation"; // corrected import path
 
 const Signup = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -14,30 +20,33 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { firstName, lastName, username, email, password, confirmPassword } =
-      formData;
+    const { firstName, lastName, username, email, password, confirmPassword } = formData;
 
     if (!firstName || !lastName || !username || !email || !password || !confirmPassword) {
-      return alert("Please fill all fields");
+      alert("Please fill all fields");
+      return;
     }
 
     if (password !== confirmPassword) {
-      return alert("Passwords do not match");
+      alert("Passwords do not match");
+      return;
     }
 
-    console.log("Signup Data:", formData);
-    alert("Signup data logged to console!");
+    try {
+      await dispatch(signUp(formData, navigate));
+    } catch (error) {
+      console.error("Error during signup:", error);
+      alert("Signup failed. Please try again.");
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[85vh] bg-slate-950 text-white px-4">
       <div className="bg-slate-900 p-10 rounded-2xl shadow-xl w-full max-w-2xl border border-slate-800 mt-8 mb-8">
-        <h2 className="text-3xl font-bold text-center mb-8">
-          Create an Account ✨
-        </h2>
+        <h2 className="text-3xl font-bold text-center mb-8">Create an Account ✨</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* First + Last Name */}
@@ -128,9 +137,9 @@ const Signup = () => {
 
         <p className="text-gray-400 text-center mt-6">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-400 hover:underline">
+          <Link to="/login" className="text-blue-400 hover:underline">
             Log in
-          </a>
+          </Link>
         </p>
       </div>
     </div>

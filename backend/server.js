@@ -21,7 +21,8 @@ dbConnect();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*", // you can later restrict this to your frontend URL
+    origin: 'http://localhost:5173', // you can later restrict this to your frontend URL
+    credentials: true,
   })
 );
 app.use(express.json());
