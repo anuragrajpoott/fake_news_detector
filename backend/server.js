@@ -1,61 +1,42 @@
-const express = require('express');
-const cors = require('cors');
-const axios = require('axios'); 
+// server.js
+const express = require("express");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
+const dbConnect = require("./src/configs/dbConnect");
+const newsRoutes = require("./routes/newsRoutes");
+const userRoutes = require("./routes/userRoutes");
 
+// Load environment variables
+dotenv.config();
+
+// Initialize Express app
 const app = express();
-const PORT = 8080;
+const PORT = process.env.PORT || 5000;
 
+// Connect to MongoDB
+dbConnect();
 
-app.use(cors({
-  origin: '*' 
-}));
-
+// Middleware
+app.use(cookieParser());
+app.use(
+  cors({
+    origin: "*", // you can later restrict this to your frontend URL
+  })
+);
 app.use(express.json());
 
-
-app.get('/', (req, res) => {
-  res.send('Hello from the Express.js backend!');
+// Default route
+app.get("/", (req, res) => {
+  res.send("✅ Express backend is running successfully!");
 });
 
+// Routes
+app.use("/api", newsRoutes);       // e.g. /api/check-news
+app.use("/api/auth", userRoutes);  // e.g. /api/auth/login, /api/auth/signup
 
- 
-app.post('/api/check-news', async (req, res) => {
-  try {
-    const { text } = req.body;
-
-    if (!text) {
-      return res.status(400).json({ error: 'No text provided.' });
-    }
-
-    
-    console.log('Forwarding request to Python ML service...');
-    const pythonApiUrl = 'http://127.0.0.1:5000/predict'; 
-    const pythonResponse = await axios.post(pythonApiUrl, {
-      text: text,
-    });
-
-    
-    const prediction = pythonResponse.data; 
-    console.log('Received prediction:', prediction);
-
-   
-    res.json(prediction);
-    
-  } catch (error) {
-    console.error('Error in /api/check-news:', error.message);
-    if (error.code === 'ECONNREFUSED') {
-      
-      return res.status(500).json({ error: 'Could not connect to the Python ML service. Is it running?' });
-    }
-    res.status(500).json({ error: 'An error occurred while processing the request.' });
-  }
-});
-
-
-
+// Start server
 app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-  console.log(`Frontend (index.html) is separate. Backend is ready for requests.`);
-  console.log(`Make sure the Python/Flask server is also running on port 5000!`);
+  console.log(`🚀 Server listening on port ${PORT}`);
+  console.log(`🧠 Backend ready — ensure Python/Flask server runs on port 5000`);
 });
-
