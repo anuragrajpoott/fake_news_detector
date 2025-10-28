@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export const axiosConnector = (method, url, data, headers, params) => {
+export const apiConnector = (method, url, data, headers, params) => {
   return axiosInstance({
     method,
     url,
