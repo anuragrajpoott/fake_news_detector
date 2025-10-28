@@ -1,10 +1,8 @@
 // routes/newsRoutes.js
-import express from "express";
-import { checkNews } from "../controllers/newsController.js";
+const express = require('express');
+const { checkNews } = require('../controllers/newsController');
 
 const router = express.Router();
+router.post('/check-news', checkNews);
 
-// POST /api/check-news
-router.post("/check-news", checkNews);
-
-export default router;
+module.exports = router;
