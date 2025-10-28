@@ -1,8 +1,20 @@
-import React, {  useState } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/slices/userSlice";
+import { toast } from "react-hot-toast";
 
-export const Nav = () => {
-  const [user, setUser] = useState(null);
+const Nav = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.user);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    toast.success("Logged out successfully!");
+    navigate("/login");
+  };
 
   return (
     <nav className="bg-slate-900 text-white sticky top-0 z-50 shadow-md">
@@ -12,13 +24,17 @@ export const Nav = () => {
           Fake<span className="text-blue-500">News</span> Detector
         </Link>
 
-        {/* Right side */}
+        {/* Right Side */}
         {user ? (
           <div className="flex items-center space-x-4">
             <span className="text-gray-300">
-              Hello, <span className="font-semibold text-blue-400">{user}</span>
+              Hello,{" "}
+              <span className="font-semibold text-blue-400">
+                {user?.firstName}
+              </span>
             </span>
             <button
+              onClick={handleLogout}
               className="px-4 py-2 rounded-lg border border-red-500 text-red-400 hover:bg-red-500 hover:text-white transition-all"
             >
               Sign Out
@@ -44,3 +60,5 @@ export const Nav = () => {
     </nav>
   );
 };
+
+export default Nav;

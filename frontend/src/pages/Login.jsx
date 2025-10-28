@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { login } from "../services/operations/authOperation"; // corrected import path
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -10,23 +16,28 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.username || !formData.password) {
-      return alert("Please fill all fields");
+    const { username, password } = formData;
+
+    if (!username || !password) {
+      alert("Please fill all fields");
+      return;
     }
 
-    console.log("Login Data:", formData);
-    alert("Login data logged to console!");
+    try {
+      await dispatch(login(formData, navigate));
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Login failed. Please try again.");
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[85vh] bg-slate-950 text-white px-4">
       <div className="bg-slate-900 p-10 rounded-2xl shadow-xl w-full max-w-2xl border border-slate-800 mt-8 mb-8">
-        <h2 className="text-3xl font-bold text-center mb-8">
-          Welcome Back 👋
-        </h2>
+        <h2 className="text-3xl font-bold text-center mb-8">Welcome Back 👋</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Username */}
@@ -65,9 +76,9 @@ const Login = () => {
 
         <p className="text-gray-400 text-center mt-6">
           Don’t have an account?{" "}
-          <a href="/signup" className="text-blue-400 hover:underline">
+          <Link to="/signup" className="text-blue-400 hover:underline">
             Sign up
-          </a>
+          </Link>
         </p>
       </div>
     </div>

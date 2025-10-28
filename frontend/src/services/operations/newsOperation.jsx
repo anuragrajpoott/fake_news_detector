@@ -1,20 +1,23 @@
-import { apiConnector } from "../../utils/apiConnector.jsx";
-import { endPoints } from "../apis.jsx";
-import { setText, setResult } from "../slices/newsSlice.js";
+import { toast } from "react-hot-toast";
+import { apiConnector } from "../../utils/apiConnector";
+import { endPoints } from "../apis";
+import { setText, setResult } from "../../redux/slices/newsSlice";
 
-
+// ───────────────────────────────
+// CHECK NEWS (Fake News Detection)
+// ───────────────────────────────
 export function checkNews(newsText) {
   return async (dispatch) => {
     try {
-      // call backend
-      const response = await apiConnector("POST", endPoints.NewsCheck, { text: newsText });
+      const response = await apiConnector("POST", endPoints.NEWS_CHECK, { text: newsText });
 
       if (!response?.data?.success) {
-        throw new Error(response?.data?.message || "Unexpected response");
+        throw new Error(response?.data?.message || "Unexpected response from server");
       }
 
-      // store backend result in redux
-      dispatch(setResult(response.data.data)); // assuming backend returns { data: { prediction, confidence } }
+      const result = response.data.data; // e.g. { prediction: "Fake", confidence: 0.92 }
+
+      dispatch(setResult(result));
 
       toast.success("News analyzed successfully!");
     } catch (error) {
