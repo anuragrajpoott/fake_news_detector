@@ -11,7 +11,7 @@ export const checkNews = async (req, res) => {
 
     console.log("Forwarding request to Python ML service...");
 
-    const pythonApiUrl = process.env.PYTHON_API_URL | "http://127.0.0.1:5000/predict";
+    const pythonApiUrl = process.env.PYTHON_API_URL || "http://127.0.0.1:5000/predict";
     const pythonResponse = await axios.post(pythonApiUrl, { text });
 
     const prediction = pythonResponse.data;
