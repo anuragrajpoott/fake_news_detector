@@ -4,8 +4,8 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const dbConnect = require("./src/configs/dbConnect");
-const newsRoutes = require("./routes/newsRoutes");
-const userRoutes = require("./routes/userRoutes");
+const newsRoutes = require("./src/routes/newsRoutes");
+const userRoutes = require("./src/routes/userRoutes");
 
 // Load environment variables
 dotenv.config();
