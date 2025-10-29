@@ -21,7 +21,10 @@ dbConnect();
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'http://localhost:5173', // you can later restrict this to your frontend URL
+     origin: [
+    "http://localhost:5173",
+    "https://fake-news-detector-neon-one.vercel.app"
+  ], // you can later restrict this to your frontend URL
     credentials: true,
   })
 );
