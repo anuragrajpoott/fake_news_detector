@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:5000/api", // use http unless you have SSL configured
+  baseURL: "https://fake-news-detector-b.onrender.com/api", // use http unless you have SSL configured
   withCredentials: true,
 });
 
