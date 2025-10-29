@@ -38,7 +38,7 @@ export function signUp(formData, navigate) {
 export function login(formData, navigate) {
   return async (dispatch) => {
     try {
-      const response = await axiosConnector("POST", endPoints.LOGIN, formData);
+      const response = await apiConnector("POST", endPoints.LOGIN, formData);
 
       if (!response?.data?.success) {
         throw new Error(response.data.message);
