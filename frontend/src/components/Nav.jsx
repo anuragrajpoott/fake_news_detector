@@ -30,7 +30,7 @@ const Nav = () => {
             <span className="text-gray-300">
               Hello,{" "}
               <span className="font-semibold text-blue-400">
-                {user?.firstName}
+                {user?.username}
               </span>
             </span>
             <button
