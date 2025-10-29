@@ -6,10 +6,10 @@ import { setText, setResult } from "../../redux/slices/newsSlice";
 // ───────────────────────────────
 // CHECK NEWS (Fake News Detection)
 // ───────────────────────────────
-export function checkNews(newsText) {
+export function checkNews(formData) {
   return async (dispatch) => {
     try {
-      const response = await apiConnector("POST", endPoints.NEWS_CHECK, { text: newsText });
+      const response = await apiConnector("POST", endPoints.NEWS_CHECK, formData);
 
       if (!response?.data?.success) {
         throw new Error(response?.data?.message || "Unexpected response from server");
